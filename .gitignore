@@ -8,3 +8,4 @@ TestResults
 # Custom VS files specific to a user
 Conversion.suo
 Conversion.v11.suo
+Conversion/Conversion.csproj.user
