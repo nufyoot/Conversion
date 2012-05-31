@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
+  <TopNode>[0-1000]C:\Users\TJ\Documents\Visual Studio 11\Projects\Conversion\ConversionTests.nunit</TopNode>
+  <SelectedNode>[0-1009]Conversion.Tests.ConversionUnitTests.TestRegisterAndGet()</SelectedNode>
+  <ExcludeCategories>false</ExcludeCategories>
+  <Nodes>
+    <Node UniqueName="[0-1000]C:\Users\TJ\Documents\Visual Studio 11\Projects\Conversion\ConversionTests.nunit" Expanded="true" />
+    <Node UniqueName="[0-1004]C:\Users\TJ\Documents\Visual Studio 11\Projects\Conversion\Conversion.Tests\bin\Debug\Conversion.Tests.dll" Expanded="true" />
+    <Node UniqueName="[0-1005]Conversion" Expanded="true" />
+    <Node UniqueName="[0-1006]Conversion.Tests" Expanded="true" />
+    <Node UniqueName="[0-1001]Conversion.Tests.ConversionUnitTests" Expanded="true" />
+    <Node UniqueName="[0-1002]Conversion.Tests.ConversionUnitTests.TestRegisterAndGet" Expanded="true" />
+    <Node UniqueName="[0-1010]C:\Users\TJ\Documents\Visual Studio 11\Projects\Conversion\Conversion.Tests\bin\Debug\Conversion.Tests.dll" Expanded="true" />
+    <Node UniqueName="[0-1011]Conversion" Expanded="true" />
+    <Node UniqueName="[0-1012]Conversion.Tests" Expanded="true" />
+    <Node UniqueName="[0-1007]Conversion.Tests.ConversionUnitTests" Expanded="true" />
+    <Node UniqueName="[0-1008]Conversion.Tests.ConversionUnitTests.TestRegisterAndGet" Expanded="true" />
+  </Nodes>
+</VisualState>
