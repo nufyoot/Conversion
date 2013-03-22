@@ -13,10 +13,28 @@ namespace Conversion
     {
         private static Dictionary<Type, Dictionary<Type, Func<object, object>>> _conversionMethods = new Dictionary<Type, Dictionary<Type, Func<object, object>>>();
 
-        private delegate TOutput C<TInput, TOutput>(object o);
+        /// <summary>
+        /// Converts a given input to a specific output.
+        /// </summary>
+        /// <typeparam name="TOutput">The output type.</typeparam>
+        /// <param name="original">The original input to be converted.</param>
+        /// <returns>Returns the converted output.</returns>
         public static TOutput ConvertTo<TOutput>(this object original)
         {
+            Validation.ArgumentNotNull(original, "original");
+
             Func<object, object> conversionMethod = GetConversionMethod(original.GetType(), typeof(TOutput));
+
+            if (conversionMethod == null)
+            {
+                throw new KeyNotFoundException(
+                    string.Format(
+                        "Unable to find a conversion method from type '{0}' to type '{1}'",
+                        original.GetType().Name,
+                        typeof(TOutput).Name
+                    )
+                );
+            }
             return (TOutput)conversionMethod(original);
         }
 
@@ -41,6 +59,9 @@ namespace Conversion
         /// <returns>Returns the method to be used for converting the types.</returns>
         public static Func<object, object> GetConversionMethod(Type input, Type output)
         {
+            Validation.ArgumentNotNull(input, "input");
+            Validation.ArgumentNotNull(output, "output");
+
             Dictionary<Type, Func<object, object>> outputMethods;
             Func<object, object> result = null;
 
@@ -65,6 +86,8 @@ namespace Conversion
         /// <param name="conversionMethod">This is the method to be used when converting from one type to another.</param>
         public static void RegisterConversionMethod<TInput, TOutput>(Func<TInput, TOutput> conversionMethod)
         {
+            Validation.ArgumentNotNull(conversionMethod, "conversionMethod");
+
             Dictionary<Type, Func<object, object>> outputMethods;
 
             //------------------------------------------

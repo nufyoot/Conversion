@@ -13,11 +13,15 @@ namespace Conversion.Tests
     [TestFixture]
     public class ConversionUnitTests
     {
+        [TestFixtureSetUp]
+        public void TestSetup()
+        {
+            Conversion.ConverterFactory.RegisterConversionMethod<string, int>(s => int.Parse(s));
+        }
+
         [Test]
         public void TestRegisterAndGet()
         {
-            Conversion.ConverterFactory.RegisterConversionMethod<string, int>(s => int.Parse(s));
-
             for (int i = 0; i < 100000; i++)
             {
                 int a = i.ToString().ConvertTo<int>();
@@ -33,6 +37,13 @@ namespace Conversion.Tests
                 int a = int.Parse(i.ToString());
                 Assert.AreEqual(a, i);
             }
+        }
+
+        [Test]
+        public void TestValidation()
+        {
+            object a = null;
+            Assert.Throws<ArgumentNullException>(() => a.ConvertTo<int>());
         }
     }
 }
