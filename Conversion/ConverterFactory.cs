@@ -11,17 +11,13 @@ namespace Conversion
     /// </summary>
     public static class ConverterFactory
     {
-        private static Dictionary<Type, Dictionary<Type, Delegate>> _conversionMethods = new Dictionary<Type,Dictionary<Type,Delegate>>();
-        private static System.Reflection.MethodInfo _getConversionMethodInfo = typeof(ConverterFactory).GetMethod("GetConversionMethod");
+        private static Dictionary<Type, Dictionary<Type, Func<object, object>>> _conversionMethods = new Dictionary<Type, Dictionary<Type, Func<object, object>>>();
 
+        private delegate TOutput C<TInput, TOutput>(object o);
         public static TOutput ConvertTo<TOutput>(this object original)
         {
-            Delegate conversionMethod =
-                (Delegate)_getConversionMethodInfo
-                    .MakeGenericMethod(original.GetType(), typeof(TOutput))
-                    .Invoke(null, new object[] { });
-
-            return (TOutput)conversionMethod.Method.Invoke(conversionMethod.Target, new object[] { original });
+            Func<object, object> conversionMethod = GetConversionMethod(original.GetType(), typeof(TOutput));
+            return (TOutput)conversionMethod(original);
         }
 
         /// <summary>
@@ -33,20 +29,32 @@ namespace Conversion
         /// <returns>Returns the method to be used for converting the types.</returns>
         public static Func<TInput, TOutput> GetConversionMethod<TInput, TOutput>()
         {
-            Dictionary<Type, Delegate> outputMethods;
-            Delegate result = null;
+            return x => (TOutput)GetConversionMethod(typeof(TInput), typeof(TOutput))(x);
+        }
 
-            if (!_conversionMethods.TryGetValue(typeof(TInput), out outputMethods))
+        /// <summary>
+        /// Gets the conversion method to be used for converting from the given <c>input</c>
+        /// to the given <c>output</c>.
+        /// </summary>
+        /// <param name="input">This is the input type.</typeparam>
+        /// <param name="output">Ths is the output type.</typeparam>
+        /// <returns>Returns the method to be used for converting the types.</returns>
+        public static Func<object, object> GetConversionMethod(Type input, Type output)
+        {
+            Dictionary<Type, Func<object, object>> outputMethods;
+            Func<object, object> result = null;
+
+            if (!_conversionMethods.TryGetValue(input, out outputMethods))
             {
                 return null;
             }
 
-            if (!outputMethods.TryGetValue(typeof(TOutput), out result))
+            if (!outputMethods.TryGetValue(output, out result))
             {
                 return null;
             }
 
-            return (Func<TInput, TOutput>)result;
+            return result;
         }
 
         /// <summary>
@@ -57,13 +65,13 @@ namespace Conversion
         /// <param name="conversionMethod">This is the method to be used when converting from one type to another.</param>
         public static void RegisterConversionMethod<TInput, TOutput>(Func<TInput, TOutput> conversionMethod)
         {
-            Dictionary<Type, Delegate> outputMethods;
+            Dictionary<Type, Func<object, object>> outputMethods;
 
             //------------------------------------------
             // First, see if we need to add a collection of conversion methods for the given input.
             if (!_conversionMethods.TryGetValue(typeof(TInput), out outputMethods))
             {
-                _conversionMethods.Add(typeof(TInput), outputMethods = new Dictionary<Type,Delegate>());
+                _conversionMethods.Add(typeof(TInput), outputMethods = new Dictionary<Type, Func<object, object>>());
             }
             //------------------------------------------
 
@@ -71,11 +79,11 @@ namespace Conversion
             // Next, find the matching conversion method for the given output and either add it or replace it.
             if (outputMethods.ContainsKey(typeof(TOutput)))
             {
-                outputMethods[typeof(TOutput)] = conversionMethod;
+                outputMethods[typeof(TOutput)] = x => conversionMethod((TInput)x);
             }
             else
             {
-                outputMethods.Add(typeof(TOutput), conversionMethod);
+                outputMethods.Add(typeof(TOutput), x => conversionMethod((TInput)x));
             }
             //------------------------------------------
         }

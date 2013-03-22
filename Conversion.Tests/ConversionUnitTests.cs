@@ -7,25 +7,28 @@ using NUnit.Framework;
 
 namespace Conversion.Tests
 {
+
+    public delegate object ObjectConverter(object input);
+
     [TestFixture]
     public class ConversionUnitTests
     {
-        [TestCase]
+        [Test]
         public void TestRegisterAndGet()
         {
             Conversion.ConverterFactory.RegisterConversionMethod<string, int>(s => int.Parse(s));
 
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 int a = i.ToString().ConvertTo<int>();
                 Assert.AreEqual(a, i);
             }
         }
 
-        [TestCase]
+        [Test]
         public void TestRegisterAndGetFast()
         {
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 int a = int.Parse(i.ToString());
                 Assert.AreEqual(a, i);
