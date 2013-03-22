@@ -11,14 +11,8 @@ namespace Conversion
     /// </summary>
     public static class ConverterFactory
     {
-        #region Fields
-
         private static Dictionary<Type, Dictionary<Type, Delegate>> _conversionMethods = new Dictionary<Type,Dictionary<Type,Delegate>>();
         private static System.Reflection.MethodInfo _getConversionMethodInfo = typeof(ConverterFactory).GetMethod("GetConversionMethod");
-
-        #endregion
-
-        #region Methods
 
         public static TOutput ConvertTo<TOutput>(this object original)
         {
@@ -85,7 +79,5 @@ namespace Conversion
             }
             //------------------------------------------
         }
-
-        #endregion
     }
 }

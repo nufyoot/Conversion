@@ -11,14 +11,8 @@ namespace Conversion
     /// </summary>
     internal class ConversionMethod 
     {
-        #region Fields
-
         private Delegate _method;
         private int _weight;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the method to be used for conversion.
@@ -35,7 +29,5 @@ namespace Conversion
         {
             get { return _weight; }
         }
-
-        #endregion
     }
 }
