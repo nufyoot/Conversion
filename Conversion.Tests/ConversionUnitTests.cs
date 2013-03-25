@@ -44,6 +44,9 @@ namespace Conversion.Tests
         {
             object a = null;
             Assert.Throws<ArgumentNullException>(() => a.ConvertTo<int>());
+
+            var b = new { IsEmpty = true };
+            Assert.Throws<KeyNotFoundException>(() => b.ConvertTo<int>());
         }
     }
 }
